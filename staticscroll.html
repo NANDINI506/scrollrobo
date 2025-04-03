@@ -8,7 +8,6 @@
     <!-- Importing Model Viewer for displaying 3D models -->
     <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
 
-
     <style>
         /* Basic page styling */
         body {
@@ -32,6 +31,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: rgb(6, 0, 0);
         }
 
         /* 3D Robot Styling */
@@ -39,14 +39,14 @@
             width: 300px;
             height: 300px;
             position: absolute;
-            left: 50px; /* Initial position on the left */
+            left: 100px; /* Initial position on the left */
             top: 50%;
-            transform: translateY(-50%) translateX(0); /* Centered vertically */
+            transform: translateY(-50%) translateX(0); /* Start position */
             transition: transform 0.1s ease-out; /* Smooth movement */
             z-index: 100; /* Ensures robot is above text */
         }
 
-        /* Fixed "MULTIOPS" Text */
+        /* Moving Text */
         .text {
             font-size: 150px;
             font-weight: bold;
@@ -58,10 +58,10 @@
             left: 50%; /* Centered horizontally */
             transform: translateX(-50%); /* Ensures perfect centering */
             z-index: -5; /* Lower z-index so text stays behind the robot */
-            background-color: rgb(178, 184, 226);
-            width: 150vw;
+            width: 100vw;
             text-align: center;
-            text-wrap: nowrap /* Prevents text wrapping */
+            text-wrap: nowrap; /* Prevents text wrapping */
+            transition: transform 0.1s ease-out; /* Smooth movement */
         }
     </style>
 </head>
@@ -77,8 +77,8 @@
             id="robot">
         </model-viewer>
 
-        <!-- Fixed "MULTIOPS" Text -->
-        <div class="text">MULTIOPS IT SOLUTIONS </div>
+        <!-- Moving "MULTIOPS IT SOLUTIONS" Text -->
+        <div class="text" id="text">MULTIOPS IT SOLUTIONS---------</div>
     </div>
 
     <!-- Extra spacer to enable scrolling effect -->
@@ -86,27 +86,35 @@
 
     <script>
         const robot = document.getElementById("robot");
+        const text = document.getElementById("text");
+
+        // Define movement limits
+        const robotStartX = 100;   // Robot's initial position (px)
+        const robotMaxX = 1000;     // Max position near "MULTIOPS"
+        const robotMinX = 200;     // Minimum position when scrolling back (prevents full reset)
 
         // Event listener to track scroll events
         window.addEventListener("scroll", () => {
             // Calculate scroll progress (0 at top, 1 at bottom)
             let scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
 
-            // Move the robot horizontally as the user scrolls
-            let moveX = scrollPercent * 1000; // Moves the robot up to 1000px to the right
+            // Move the robot, but limit its forward and backward positions
+            let moveX = scrollPercent * 1000; // Moves right
+            if (moveX > robotMaxX) moveX = robotMaxX; // Stop moving forward
+            if (moveX < robotMinX) moveX = robotMinX; // Stop before going back fully
 
-            // Apply the transformation (robot moves right as you scroll down)
+            // Apply transformations
             robot.style.transform = `translateY(-50%) translateX(${moveX}px)`;
-
+            text.style.transform = `translateX(${moveX * -3}px) translateY(0)`; // Moves left slower
         });
+
         document.querySelector("model-viewer").addEventListener("load", () => {
-    console.log("3D model loaded successfully!");
+            console.log("3D model loaded successfully!");
         });
 
         document.querySelector("model-viewer").addEventListener("error", (e) => {
             console.error("Error loading 3D model:", e);
-});
-
+        });
     </script>
 
 </body>
