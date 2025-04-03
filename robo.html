@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Animation</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .robot {
+            width: 150px; /* Adjust robot size */
+            position: absolute;
+            left: -150px; /* Start fully outside left */
+            transition: transform 0.6s ease-in-out;
+        }
+
+        .text {
+            font-size: 80px;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <img src="robo3.webp" alt="Cute Robot" class="robot" id="robot">
+        <div class="text">MultiOps</div>
+    </div>
+
+    <script>
+        function animateRobot() {
+            let screenWidth = window.innerWidth;
+
+            let tl = gsap.timeline({ repeat: -1, repeatDelay: 1 });
+
+            tl.to("#robot", { 
+                x: screenWidth / 2 - 100, // Move towards the center
+                duration: 3,
+                ease: "power2.inOut"
+            })
+            .to("#robot", { 
+                delay: 0.5,
+                transform: "scaleX(-1)", // Look at MultiOps
+                duration: 0.5
+            })
+            .to("#robot", { 
+                delay: 1, 
+                transform: "scaleX(1)", // Face forward again
+                duration: 0.5
+            })
+            .to("#robot", { 
+                x: screenWidth, // Move fully to the right
+                duration: 3,
+                ease: "power2.inOut"
+            })
+            .set("#robot", { x: -200 }) // Reset to left before restarting
+        }
+
+        animateRobot();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Robot Scroll Animation</title>
+
+    <!-- Importing Model Viewer for displaying 3D models -->
+    <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+
+    <style>
+        body {
+            background-color: #000;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+            color: #fff;
+        }
+
+        /* Extra space to enable scrolling */
+        .spacer {
+            height: 150vh; /* Makes page long enough for scrolling */
+        }
+
+        /* Container for the animation */
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: rgb(42, 210, 239);
+        }
+
+        /* Styling the 3D robot */
+        model-viewer {
+            width: 180px;
+            height: 180px;
+            position: absolute;
+            left: 50px; /* Starts at the left */
+            top: 50%;
+            transform: translateY(-50%) translateX(0); /* Initial position */
+            transition: transform 0.2s ease-out;
+        }
+
+        /* Styling for the text */
+        .text {
+            font-size: 60px;
+            font-weight: bold;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px cyan, 0 0 30px cyan, 0 0 50px cyan;
+            animation: glow 2s infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 15px cyan, 0 0 30px cyan, 0 0 50px cyan;
+            }
+            to {
+                text-shadow: 0 0 20px cyan, 0 0 40px cyan, 0 0 60px cyan;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="spacer"></div> <!-- Space to scroll -->
+
+    <div class="container">
+        <!-- 3D Robot -->
+        <model-viewer 
+            src="futuristic_flying_animated_robot_-_low_poly.glb"
+            alt="3D Robot"
+            id="robot">
+        </model-viewer>
+
+        <!-- Glowing Text -->
+        <div class="text">MULTIOPS</div>
+    </div>
+
+    <div class="spacer"></div> <!-- More space to scroll -->
+
+    <script>
+        // Select the robot
+        const robot = document.getElementById("robot");
+
+        // Function to update robot's position on scroll
+        window.addEventListener("scroll", () => {
+            // Get scroll percentage (0 at top, 1 at bottom)
+            let scrollPercent = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+
+            // Move the robot from left (0px) to center (~600px)
+            let moveX = scrollPercent * 600; // Adjust movement range
+
+            // Apply transformation
+            robot.style.transform = `translateY(-50%) translateX(${moveX}px)`;
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Robot Animation</title>
+
+    <!-- Importing Model Viewer for displaying 3D models -->
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
+    
+    <!-- Importing GSAP for animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/MotionPathPlugin.min.js"></script>
+
+    <style>
+        /* Styling for the entire webpage */
+        body {
+            background-color: #000; /* Black background */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            overflow: hidden; /* Prevents scrollbars */
+        }
+
+        /* Container for the text and robot */
+        .container {
+            position: relative;
+            width: 800px; /* Increased width for bigger movement area */
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Styling the 3D robot */
+        model-viewer {
+            width: 180px; /* Bigger Robot */
+            height: 180px;
+            position: absolute;
+            z-index: 2; /* Ensures robot is above text */
+        }
+
+        /* Styling for the "MULTIOPS" text */
+        .text {
+            font-size: 60px;
+            font-weight: bold;
+            color: #fff;
+            position: absolute;
+            z-index: 1; /* Text stays behind the robot */
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            text-shadow: 0 0 15px cyan, 0 0 30px cyan, 0 0 50px cyan;
+            animation: glow 2s infinite alternate; /* Glowing effect */
+        }
+
+        /* Text glowing effect animation */
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 15px cyan, 0 0 30px cyan, 0 0 50px cyan;
+            }
+            to {
+                text-shadow: 0 0 20px cyan, 0 0 40px cyan, 0 0 60px cyan;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 3D Robot Model -->
+        <model-viewer 
+            src="futuristic_flying_animated_robot_-_low_poly.glb"
+            alt="3D Robot"
+            auto-rotate 
+            camera-controls 
+            ar
+            id="robot">
+        </model-viewer>
+
+        <!-- "MULTIOPS" Glowing Text -->
+        <div class="text">MULTIOPS</div>
+    </div>
+
+    <script>
+        // Register GSAP plugin for motion path animation
+        gsap.registerPlugin(MotionPathPlugin);
+
+        // Animate the robot to move above the text, without crossing it
+        gsap.to("#robot", {
+            motionPath: {
+                path: [
+                    { x: -250, y: -100 },  // Start at the left of the text (above the "M")
+                    { x: 0, y: -100 },     // Move across the center (still above the text)
+                    { x: 250, y: -100 }    // Move to the right of the text (above the "S")
+                ],
+                curviness: 1,  // Smooth motion
+                autoRotate: false // Don't rotate robot (no upside down)
+            },
+            duration: 5, // Slower movement for a calm effect
+            repeat: -1, // Infinite loop
+            yoyo: true, // Moves back and forth
+            ease: "power1.inOut" // Smooth, soft movement
+        });
+    </script>
+
+</body>
+</html>

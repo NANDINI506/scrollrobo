@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Robot Animation</title>
+    <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        body {
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        model-viewer {
+            width: 300px;
+            height: 300px;
+            position: relative;
+        }
+
+        .text {
+            font-size: 40px;
+            font-weight: bold;
+            color: white;
+            margin-left: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 3D Robot Model -->
+        <model-viewer 
+            src="futuristic_flying_animated_robot_-_low_poly.glb"
+            alt="3D Robot"
+            camera-controls 
+            ar
+            id="robot">
+        </model-viewer>
+
+        <!-- Text -->
+        <div class="text">MULTIOPS</div>
+    </div>
+
+    <script>
+        // Make the robot move left and right
+        gsap.to("#robot", {
+            x: 70,  // Move right
+            duration: 2,
+            yoyo: true, // Move back
+            repeat: -1, // Infinite loop
+            ease: "power1.inOut"
+        });
+    </script>
+
+</body>
+</html>
